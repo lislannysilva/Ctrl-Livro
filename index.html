@@ -1,0 +1,2662 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ctrl + Livro | Sistema de Controle Bibliotecário</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-sidebar: #0f172a;
+      --primary: #0d9488;
+      --primary-hover: #0f766e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* LOGIN */
+
+    .login-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .login-left {
+      flex: 1;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .login-left h2 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+
+    .login-left p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 30px;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .feature-item i {
+      color: var(--primary);
+    }
+
+    .login-right {
+      width: 450px;
+      background: var(--bg-card);
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-box h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .login-box > p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 25px;
+    }
+
+    .demo-accounts {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .demo-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* APLICAÇÃO */
+
+    .app-container {
+      display: none;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 30px;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .menu-item:hover,
+    .menu-item.active {
+      background: var(--primary);
+      color: var(--text-main);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-profile-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .user-info p {
+      font-size: 0.85rem;
+    }
+
+    .user-info p.name {
+      font-weight: 600;
+    }
+
+    .user-info p.role {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .btn-logout {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .btn-logout:hover {
+      color: var(--danger);
+    }
+
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+      background: #0b1120;
+    }
+
+    .header {
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* ESTATÍSTICAS */
+
+    .grid-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-card h3 {
+      font-size: 1.8rem;
+      margin-top: 5px;
+    }
+
+    .stat-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* LIVROS */
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .book-card {
+      background: var(--bg-card);
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+      min-width: 0;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .book-cover-container {
+      width: 100%;
+      height: 280px;
+      border-radius: 7px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #0f172a;
+      position: relative;
+    }
+
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .book-card:hover .book-cover-img {
+      transform: scale(1.03);
+    }
+
+    .cover-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      background: #0f172a;
+    }
+
+    .cover-loading i {
+      margin-right: 7px;
+    }
+
+    .book-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 6px 0 4px;
+      line-height: 1.35;
+      min-height: 38px;
+    }
+
+    .book-author {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .book-status-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      gap: 8px;
+    }
+
+    /* TABELAS */
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 25px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .data-table th {
+      background: #162032;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* BADGES */
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+    }
+
+    .badge-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    /* FORMULÁRIOS */
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      background: var(--primary);
+      color: var(--text-main);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* PREFERÊNCIAS */
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .chip {
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .chip.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* CHAT */
+
+    .chat-container {
+      background: var(--bg-card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      height: 450px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .message.bot {
+      background: #334155;
+      align-self: flex-start;
+    }
+
+    .message.user {
+      background: var(--primary);
+      align-self: flex-end;
+    }
+
+    .chat-input-area {
+      padding: 15px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+    }
+
+    /* RESPONSIVO */
+
+    @media (max-width: 900px) {
+      .login-left {
+        display: none;
+      }
+
+      .login-right {
+        width: 100%;
+      }
+
+      .sidebar {
+        width: 220px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .app-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+
+      .menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+
+      .books-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .book-cover-container {
+        height: 240px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .books-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+
+  <div id="login-screen" class="login-container">
+
+    <div class="login-left">
+
+      <div class="login-brand">
+        <i class="fa-solid fa-book-bookmark"></i>
+        <span>Ctrl + Livro</span>
+      </div>
+
+      <h2>Sua biblioteca inteligente começa aqui.</h2>
+
+      <p>
+        Gerencie acervo, empréstimos e usuários enquanto nossa IA
+        recomenda livros personalizados para cada leitor.
+      </p>
+
+      <ul class="feature-list">
+
+        <li class="feature-item">
+          <i class="fa-solid fa-circle-check"></i>
+          Catálogo completo com 30 livros e gestão de exemplares
+        </li>
+
+        <li class="feature-item">
+          <i class="fa-solid fa-circle-check"></i>
+          Assistente de IA que aprende com seus interesses
+        </li>
+
+        <li class="feature-item">
+          <i class="fa-solid fa-circle-check"></i>
+          Recomendações personalizadas respeitando diretrizes
+        </li>
+
+      </ul>
+
+    </div>
+
+    <div class="login-right">
+
+      <div class="login-box">
+
+        <h3>Entrar</h3>
+
+        <p>Acesse sua conta para continuar</p>
+
+        <form onsubmit="handleLogin(event)">
+
+          <div class="form-group">
+            <label>E-mail</label>
+
+            <input
+              type="email"
+              id="login-email"
+              class="form-control"
+              placeholder="seu@email.com"
+              required
+              value="lislanny@ctrllivro.com"
+            >
+          </div>
+
+          <div class="form-group">
+
+            <label>Senha</label>
+
+            <input
+              type="password"
+              id="login-password"
+              class="form-control"
+              placeholder="••••••••"
+              required
+              value="123456"
+            >
+
+          </div>
+
+          <button type="submit" class="btn">
+            Entrar
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+
+        </form>
+
+        <div class="demo-accounts">
+
+          <div class="demo-title">
+            Contas de demonstração
+          </div>
+
+          <div class="demo-btns">
+
+            <button
+              class="btn-secondary"
+              onclick="loginDemo('user')"
+            >
+              Usuário Demo
+            </button>
+
+            <button
+              class="btn-secondary"
+              onclick="loginDemo('admin')"
+            >
+              Admin Demo
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- APLICAÇÃO -->
+
+  <div id="app-screen" class="app-container">
+
+    <aside class="sidebar">
+
+      <div>
+
+        <div class="brand">
+
+          <i class="fa-solid fa-book-bookmark"></i>
+
+          <span>Ctrl + Livro</span>
+
+        </div>
+
+        <ul class="menu">
+
+          <li
+            class="menu-item active"
+            onclick="switchTab('dashboard', this)"
+          >
+            <i class="fa-solid fa-chart-line"></i>
+            Dashboard
+          </li>
+
+          <li
+            class="menu-item"
+            onclick="switchTab('livros', this)"
+          >
+            <i class="fa-solid fa-book"></i>
+            Livros
+          </li>
+
+          <li
+            class="menu-item"
+            onclick="switchTab('usuarios', this)"
+          >
+            <i class="fa-solid fa-users"></i>
+            Usuários
+          </li>
+
+          <li
+            class="menu-item"
+            onclick="switchTab('emprestimos', this)"
+          >
+            <i class="fa-solid fa-right-left"></i>
+            Empréstimos
+          </li>
+
+          <li
+            class="menu-item"
+            onclick="switchTab('preferencias', this)"
+          >
+            <i class="fa-solid fa-heart"></i>
+            Minhas Preferências
+          </li>
+
+          <li
+            class="menu-item"
+            onclick="switchTab('assistente', this)"
+          >
+            <i class="fa-solid fa-robot"></i>
+            Assistente de IA
+          </li>
+
+          <li
+            class="menu-item"
+            onclick="switchTab('recomendacoes', this)"
+          >
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            Recomendações
+          </li>
+
+          <li
+            class="menu-item"
+            onclick="switchTab('configuracoes', this)"
+          >
+            <i class="fa-solid fa-gear"></i>
+            Configurações
+          </li>
+
+        </ul>
+
+      </div>
+
+      <div class="user-profile">
+
+        <div class="user-profile-info">
+
+          <div class="avatar" id="user-avatar">
+            L
+          </div>
+
+          <div class="user-info">
+
+            <p class="name" id="user-name">
+              Lislanny Silva
+            </p>
+
+            <p class="role" id="user-role">
+              Administrador / UX
+            </p>
+
+          </div>
+
+        </div>
+
+        <button
+          class="btn-logout"
+          onclick="logout()"
+          title="Sair"
+        >
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+      <!-- DASHBOARD -->
+
+      <section
+        id="dashboard"
+        class="tab-content active"
+      >
+
+        <div class="header">
+
+          <h1>Dashboard</h1>
+
+          <p id="welcome-msg">
+            Bem-vindo de volta, Lislanny!
+          </p>
+
+        </div>
+
+        <div class="grid-stats">
+
+          <div class="stat-card">
+            <p>Total de Livros</p>
+            <h3>30</h3>
+          </div>
+
+          <div class="stat-card">
+            <p>Exemplares Disponíveis</p>
+            <h3>68</h3>
+          </div>
+
+          <div class="stat-card">
+            <p>Empréstimos Ativos</p>
+            <h3>5</h3>
+          </div>
+
+          <div class="stat-card">
+            <p>Em Atraso</p>
+            <h3 style="color: var(--danger);">
+              2
+            </h3>
+          </div>
+
+        </div>
+
+        <h2 style="margin-bottom: 15px; font-size: 1.1rem;">
+          Atividades Recentes
+        </h2>
+
+        <table class="data-table">
+
+          <thead>
+
+            <tr>
+              <th>Livro</th>
+              <th>Usuário</th>
+              <th>Data</th>
+              <th>Status</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="recent-activity-list"></tbody>
+
+        </table>
+
+      </section>
+
+
+      <!-- LIVROS -->
+
+      <section
+        id="livros"
+        class="tab-content"
+      >
+
+        <div class="header">
+
+          <h1>Acervo de Livros</h1>
+
+          <p>
+            30 títulos cadastrados no acervo
+          </p>
+
+        </div>
+
+        <div
+          class="books-grid"
+          id="books-list"
+        ></div>
+
+      </section>
+
+
+      <!-- USUÁRIOS -->
+
+      <section
+        id="usuarios"
+        class="tab-content"
+      >
+
+        <div class="header">
+
+          <h1>Gestão de Usuários</h1>
+
+          <p>
+            Membros e administradores cadastrados
+          </p>
+
+        </div>
+
+        <table class="data-table">
+
+          <thead>
+
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Tipo</th>
+              <th>Status</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="users-list"></tbody>
+
+        </table>
+
+      </section>
+
+
+      <!-- EMPRÉSTIMOS -->
+
+      <section
+        id="emprestimos"
+        class="tab-content"
+      >
+
+        <div class="header">
+
+          <h1>Empréstimos e Devoluções</h1>
+
+          <p>
+            Acompanhamento de prazos e alertas de atraso
+          </p>
+
+        </div>
+
+        <table class="data-table">
+
+          <thead>
+
+            <tr>
+              <th>Usuário</th>
+              <th>Livro</th>
+              <th>Empréstimo</th>
+              <th>Devolução Prevista</th>
+              <th>Status</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="loans-list"></tbody>
+
+        </table>
+
+      </section>
+
+
+      <!-- PREFERÊNCIAS -->
+
+      <section
+        id="preferencias"
+        class="tab-content"
+      >
+
+        <div class="header">
+
+          <h1>Minhas Preferências</h1>
+
+          <p>
+            Configure suas preferências para ajustar
+            as recomendações da IA
+          </p>
+
+        </div>
+
+        <div
+          style="
+            background-color: var(--bg-card);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+          "
+        >
+
+          <label
+            style="
+              display:block;
+              margin-bottom:12px;
+              font-weight:600;
+            "
+          >
+            Gêneros favoritos
+          </label>
+
+          <div class="chip-group">
+
+            <div class="chip" onclick="toggleChip(this)">
+              Romance
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              Fantasia
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              Ficção Científica
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              Ficção
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              Mistério
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              Terror
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              Tecnologia
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              História
+            </div>
+
+            <div class="chip" onclick="toggleChip(this)">
+              Desenvolvimento Pessoal
+            </div>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              Meus interesses (palavras-chave)
+            </label>
+
+            <input
+              type="text"
+              id="pref-text"
+              class="form-control"
+              placeholder="Ex: programação, inteligência artificial, aventura"
+            >
+
+          </div>
+
+          <button
+            class="btn"
+            style="width:auto; padding:10px 24px;"
+            onclick="savePreferences()"
+          >
+            Salvar preferências
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- ASSISTENTE -->
+
+      <section
+        id="assistente"
+        class="tab-content"
+      >
+
+        <div class="header">
+
+          <h1>Assistente de IA</h1>
+
+          <p>
+            Converse com o Ctrl + Livro
+            para encontrar novas leituras
+          </p>
+
+        </div>
+
+        <div class="chat-container">
+
+          <div
+            class="chat-messages"
+            id="chat-box"
+          >
+
+            <div class="message bot">
+              Olá! Sou o assistente virtual do
+              <strong>Ctrl + Livro</strong>.
+              Como posso ajudar com sua leitura hoje?
+            </div>
+
+          </div>
+
+          <div class="chat-input-area">
+
+            <input
+              type="text"
+              id="chat-input"
+              class="form-control"
+              placeholder="Ex: Me recomende um livro de tecnologia..."
+              onkeydown="if(event.key === 'Enter') sendMessage()"
+            >
+
+            <button
+              class="btn"
+              style="width:auto; padding:0 20px;"
+              onclick="sendMessage()"
+            >
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RECOMENDAÇÕES -->
+
+      <section
+        id="recomendacoes"
+        class="tab-content"
+      >
+
+        <div class="header">
+
+          <h1>Recomendações Personalizadas</h1>
+
+          <p>
+            Livros recomendados com base nas
+            preferências e diretrizes ativas
+          </p>
+
+        </div>
+
+        <div id="recommendation-result"></div>
+
+      </section>
+
+
+      <!-- CONFIGURAÇÕES -->
+
+      <section
+        id="configuracoes"
+        class="tab-content"
+      >
+
+        <div class="header">
+
+          <h1>Configurações do Sistema</h1>
+
+          <p>
+            Diretrizes ativas no sistema de controle
+          </p>
+
+        </div>
+
+        <div
+          style="
+            background-color: var(--bg-card);
+            padding:20px;
+            border-radius:10px;
+            border:1px solid var(--border);
+          "
+        >
+
+          <h3
+            style="
+              margin-bottom:10px;
+              font-size:1.1rem;
+            "
+          >
+            Diretrizes da Biblioteca
+          </h3>
+
+          <ul
+            style="
+              list-style:none;
+              display:flex;
+              flex-direction:column;
+              gap:10px;
+              font-size:.9rem;
+            "
+          >
+
+            <li>
+              <i
+                class="fa-solid fa-circle-check"
+                style="color:var(--success)"
+              ></i>
+
+              <strong>Pertencimento ao catálogo:</strong>
+              Apenas livros cadastrados são exibidos.
+            </li>
+
+            <li>
+              <i
+                class="fa-solid fa-circle-check"
+                style="color:var(--success)"
+              ></i>
+
+              <strong>Validação de segurança:</strong>
+              Regras aplicadas ao agente de IA.
+            </li>
+
+          </ul>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+<script>
+
+/* ============================================================
+   LIVROS
+   ============================================================ */
+
+const mockBooks = [
+
+  {
+    id: 1,
+    title: "Clean Code",
+    author: "Robert C. Martin",
+    genre: "Tecnologia",
+    year: 2008,
+    available: "2 de 3"
+  },
+
+  {
+    id: 2,
+    title: "O Senhor dos Anéis",
+    author: "J.R.R. Tolkien",
+    genre: "Fantasia",
+    year: 1954,
+    available: "1 de 2"
+  },
+
+  {
+    id: 3,
+    title: "1984",
+    author: "George Orwell",
+    genre: "Ficção Científica",
+    year: 1949,
+    available: "3 de 4"
+  },
+
+  {
+    id: 4,
+    title: "Orgulho e Preconceito",
+    author: "Jane Austen",
+    genre: "Romance",
+    year: 1813,
+    available: "2 de 3"
+  },
+
+  {
+    id: 5,
+    title: "Sapiens",
+    author: "Yuval Noah Harari",
+    genre: "História",
+    year: 2011,
+    available: "3 de 4"
+  },
+
+  {
+    id: 6,
+    title: "O Iluminado",
+    author: "Stephen King",
+    genre: "Terror",
+    year: 1977,
+    available: "1 de 2"
+  },
+
+  {
+    id: 7,
+    title: "Duna",
+    author: "Frank Herbert",
+    genre: "Ficção Científica",
+    year: 1965,
+    available: "2 de 3"
+  },
+
+  {
+    id: 8,
+    title: "A Arte da Guerra",
+    author: "Sun Tzu",
+    genre: "História",
+    year: "500 a.C.",
+    available: "1 de 2"
+  },
+
+  {
+    id: 9,
+    title: "Harry Potter e a Pedra Filosofal",
+    author: "J.K. Rowling",
+    genre: "Fantasia",
+    year: 1997,
+    available: "3 de 3"
+  },
+
+  {
+    id: 10,
+    title: "O Hobbit",
+    author: "J.R.R. Tolkien",
+    genre: "Fantasia",
+    year: 1937,
+    available: "2 de 2"
+  },
+
+  {
+    id: 11,
+    title: "Dom Casmurro",
+    author: "Machado de Assis",
+    genre: "Romance",
+    year: 1899,
+    available: "4 de 5"
+  },
+
+  {
+    id: 12,
+    title: "O Pequeno Príncipe",
+    author: "Antoine de Saint-Exupéry",
+    genre: "Fantasia",
+    year: 1943,
+    available: "2 de 3"
+  },
+
+  {
+    id: 13,
+    title: "O Algoritmo Mestre",
+    author: "Pedro Domingos",
+    genre: "Tecnologia",
+    year: 2015,
+    available: "2 de 2"
+  },
+
+  {
+    id: 14,
+    title: "O Código Da Vinci",
+    author: "Dan Brown",
+    genre: "Mistério",
+    year: 2003,
+    available: "1 de 3"
+  },
+
+  {
+    id: 15,
+    title: "Arquitetura Limpa",
+    author: "Robert C. Martin",
+    genre: "Tecnologia",
+    year: 2017,
+    available: "3 de 3"
+  },
+
+  {
+    id: 16,
+    title: "Neuromancer",
+    author: "William Gibson",
+    genre: "Ficção Científica",
+    year: 1984,
+    available: "2 de 2"
+  },
+
+  {
+    id: 17,
+    title: "Percy Jackson e o Ladrão de Raios",
+    author: "Rick Riordan",
+    genre: "Fantasia",
+    year: 2005,
+    available: "1 de 2"
+  },
+
+  {
+    id: 18,
+    title: "O Programador Pragmático",
+    author: "Andrew Hunt",
+    genre: "Tecnologia",
+    year: 1999,
+    available: "2 de 2"
+  },
+
+  {
+    id: 19,
+    title: "Hábitos Atômicos",
+    author: "James Clear",
+    genre: "Desenvolvimento Pessoal",
+    year: 2018,
+    available: "4 de 4"
+  },
+
+  {
+    id: 20,
+    title: "Drácula",
+    author: "Bram Stoker",
+    genre: "Terror",
+    year: 1897,
+    available: "1 de 2"
+  },
+
+  {
+    id: 21,
+    title: "Entendendo Algoritmos",
+    author: "Aditya Y. Bhargava",
+    genre: "Tecnologia",
+    year: 2016,
+    available: "3 de 3"
+  },
+
+  {
+    id: 22,
+    title: "Admirável Mundo Novo",
+    author: "Aldous Huxley",
+    genre: "Ficção Científica",
+    year: 1932,
+    available: "2 de 3"
+  },
+
+  {
+    id: 23,
+    title: "Fahrenheit 451",
+    author: "Ray Bradbury",
+    genre: "Ficção Científica",
+    year: 1953,
+    available: "1 de 2"
+  },
+
+  {
+    id: 24,
+    title: "O Silmarillion",
+    author: "J.R.R. Tolkien",
+    genre: "Fantasia",
+    year: 1977,
+    available: "2 de 2"
+  },
+
+  {
+    id: 25,
+    title: "Sherlock Holmes",
+    author: "Arthur Conan Doyle",
+    genre: "Mistério",
+    year: 1887,
+    available: "2 de 3"
+  },
+
+  {
+    id: 26,
+    title: "O Nome do Vento",
+    author: "Patrick Rothfuss",
+    genre: "Fantasia",
+    year: 2007,
+    available: "1 de 2"
+  },
+
+  {
+    id: 27,
+    title: "Inteligência Artificial",
+    author: "Stuart Russell",
+    genre: "Tecnologia",
+    year: 2010,
+    available: "2 de 2"
+  },
+
+  {
+    id: 28,
+    title: "O Psicanalista",
+    author: "John Katzenbach",
+    genre: "Mistério",
+    year: 2002,
+    available: "3 de 3"
+  },
+
+  {
+    id: 29,
+    title: "A Revolução dos Bichos",
+    author: "George Orwell",
+    genre: "Ficção",
+    year: 1945,
+    available: "2 de 3"
+  },
+
+  {
+    id: 30,
+    title: "Pense e Enriqueça",
+    author: "Napoleon Hill",
+    genre: "Desenvolvimento Pessoal",
+    year: 1937,
+    available: "3 de 3"
+  }
+
+];
+
+
+/* ============================================================
+   USUÁRIOS
+   ============================================================ */
+
+const mockUsers = [
+
+  {
+    name: "Ana Demonstração",
+    email: "demo@librarybuddy.com",
+    type: "Membro",
+    status: "Ativo"
+  },
+
+  {
+    name: "Carlos Administrador",
+    email: "admin@librarybuddy.com",
+    type: "Admin",
+    status: "Ativo"
+  },
+
+  {
+    name: "Lislanny Silva",
+    email: "lislanny@ctrllivro.com",
+    type: "Admin/UX",
+    status: "Ativo"
+  },
+
+  {
+    name: "Rafael Lima",
+    email: "rafael.lima@email.com",
+    type: "Membro",
+    status: "Ativo"
+  }
+
+];
+
+
+/* ============================================================
+   EMPRÉSTIMOS
+   ============================================================ */
+
+const mockLoans = [
+
+  {
+    user: "Rafael Lima",
+    book: "Percy Jackson e o Ladrão de Raios",
+    date: "22/08/2026",
+    due: "05/09/2026",
+    status: "Ativo"
+  },
+
+  {
+    user: "Ana Demonstração",
+    book: "1984",
+    date: "20/08/2026",
+    due: "03/09/2026",
+    status: "Ativo"
+  },
+
+  {
+    user: "Ana Demonstração",
+    book: "Clean Code",
+    date: "15/08/2026",
+    due: "29/08/2026",
+    status: "Atrasado"
+  },
+
+  {
+    user: "Pedro Alves",
+    book: "O Iluminado",
+    date: "12/08/2026",
+    due: "26/08/2026",
+    status: "Atrasado"
+  }
+
+];
+
+
+/* ============================================================
+   CAPAS REAIS
+   ============================================================ */
+
+/*
+   Primeiro tentamos encontrar a capa no Google Books.
+
+   Se não encontrar, usamos a capa do Open Library.
+*/
+
+async function getBookCover(book) {
+
+  const query =
+    encodeURIComponent(
+      `"${book.title}" "${book.author}"`
+    );
+
+  const googleUrl =
+    `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=5`;
+
+  try {
+
+    const response = await fetch(googleUrl);
+
+    if (response.ok) {
+
+      const data = await response.json();
+
+      if (data.items && data.items.length > 0) {
+
+        /*
+          Procura primeiro um resultado que realmente
+          tenha imagem de capa.
+        */
+
+        for (const item of data.items) {
+
+          const info = item.volumeInfo;
+
+          if (info && info.imageLinks) {
+
+            let image =
+              info.imageLinks.thumbnail ||
+              info.imageLinks.smallThumbnail;
+
+            if (image) {
+
+              /*
+                O Google Books às vezes retorna HTTP.
+                Forçamos HTTPS.
+              */
+
+              image = image.replace("http://", "https://");
+
+              return image;
+            }
+          }
+        }
+      }
+    }
+
+  } catch (error) {
+
+    console.log(
+      "Google Books não encontrou:",
+      book.title
+    );
+
+  }
+
+
+  /*
+    FALLBACK — OPEN LIBRARY
+  */
+
+  const openLibraryTitle =
+    encodeURIComponent(book.title);
+
+  return `https://covers.openlibrary.org/b/title/${openLibraryTitle}-L.jpg`;
+}
+
+
+/* ============================================================
+   CRIAÇÃO DOS CARDS
+   ============================================================ */
+
+async function renderBooks() {
+
+  const booksList =
+    document.getElementById("books-list");
+
+  /*
+    Primeiro mostramos todos os 30 cards.
+    Isso evita a tela ficar vazia enquanto
+    as capas carregam.
+  */
+
+  booksList.innerHTML =
+    mockBooks.map(book => {
+
+      return `
+
+        <div
+          class="book-card"
+          data-book-id="${book.id}"
+        >
+
+          <div class="book-cover-container">
+
+            <div
+              class="cover-loading"
+              id="loading-${book.id}"
+            >
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              Carregando capa...
+            </div>
+
+            <img
+              id="cover-${book.id}"
+              class="book-cover-img"
+              alt="Capa de ${escapeHTML(book.title)}"
+              style="display:none;"
+            >
+
+          </div>
+
+
+          <div>
+
+            <div
+              style="
+                font-size:.75rem;
+                color:var(--primary);
+                font-weight:600;
+              "
+            >
+              ${escapeHTML(book.genre)}
+              •
+              ${escapeHTML(String(book.year))}
+            </div>
+
+            <div
+              class="book-title"
+              title="${escapeHTML(book.title)}"
+            >
+              ${escapeHTML(book.title)}
+            </div>
+
+            <div class="book-author">
+              ${escapeHTML(book.author)}
+            </div>
+
+          </div>
+
+
+          <div class="book-status-info">
+
+            <span
+              style="color:var(--text-muted);"
+            >
+              ${escapeHTML(book.available)}
+              dispon.
+            </span>
+
+            <span class="badge badge-success">
+              Ativo
+            </span>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+
+  /*
+    Agora carregamos as 30 capas.
+  */
+
+  for (const book of mockBooks) {
+
+    loadSingleCover(book);
+
+  }
+
+}
+
+
+/* ============================================================
+   CARREGAMENTO INDIVIDUAL DA CAPA
+   ============================================================ */
+
+async function loadSingleCover(book) {
+
+  const img =
+    document.getElementById(`cover-${book.id}`);
+
+  const loading =
+    document.getElementById(`loading-${book.id}`);
+
+  if (!img) return;
+
+  try {
+
+    const coverUrl =
+      await getBookCover(book);
+
+    /*
+      Testamos a imagem antes de mostrar.
+    */
+
+    img.onload = function() {
+
+      img.style.display = "block";
+
+      if (loading) {
+        loading.style.display = "none";
+      }
+
+    };
+
+
+    img.onerror = function() {
+
+      /*
+        Último fallback:
+        capa simples gerada no próprio navegador.
+      */
+
+      img.src =
+        createFallbackCover(book);
+
+      img.style.display = "block";
+
+      if (loading) {
+        loading.style.display = "none";
+      }
+
+    };
+
+
+    img.src = coverUrl;
+
+  } catch (error) {
+
+    img.src =
+      createFallbackCover(book);
+
+    img.style.display = "block";
+
+    if (loading) {
+      loading.style.display = "none";
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   FALLBACK VISUAL
+   ============================================================ */
+
+function createFallbackCover(book) {
+
+  const colors = [
+    "#0f766e",
+    "#1d4ed8",
+    "#7c3aed",
+    "#be123c",
+    "#b45309",
+    "#047857"
+  ];
+
+  const color =
+    colors[book.id % colors.length];
+
+  const svg = `
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 400 600"
+    >
+
+      <rect
+        width="400"
+        height="600"
+        fill="${color}"
+      />
+
+      <rect
+        x="25"
+        y="25"
+        width="350"
+        height="550"
+        rx="10"
+        fill="none"
+        stroke="rgba(255,255,255,.35)"
+        stroke-width="3"
+      />
+
+      <text
+        x="200"
+        y="100"
+        text-anchor="middle"
+        fill="white"
+        font-family="Arial"
+        font-size="22"
+        font-weight="bold"
+      >
+        CTRL + LIVRO
+      </text>
+
+      <text
+        x="200"
+        y="285"
+        text-anchor="middle"
+        fill="white"
+        font-family="Arial"
+        font-size="25"
+        font-weight="bold"
+      >
+        ${escapeHTML(book.title)}
+      </text>
+
+      <text
+        x="200"
+        y="520"
+        text-anchor="middle"
+        fill="rgba(255,255,255,.8)"
+        font-family="Arial"
+        font-size="18"
+      >
+        ${escapeHTML(book.author)}
+      </text>
+
+    </svg>
+
+  `;
+
+  return (
+    "data:image/svg+xml;charset=utf-8," +
+    encodeURIComponent(svg)
+  );
+
+}
+
+
+/* ============================================================
+   SEGURANÇA
+   ============================================================ */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+function handleLogin(event) {
+
+  if (event) {
+    event.preventDefault();
+  }
+
+  document.getElementById(
+    "login-screen"
+  ).style.display = "none";
+
+  document.getElementById(
+    "app-screen"
+  ).style.display = "flex";
+
+  initApp();
+
+}
+
+
+function loginDemo(type) {
+
+  if (type === "admin") {
+
+    document.getElementById(
+      "user-name"
+    ).innerText =
+      "Carlos Administrador";
+
+    document.getElementById(
+      "user-role"
+    ).innerText =
+      "Admin";
+
+    document.getElementById(
+      "user-avatar"
+    ).innerText =
+      "C";
+
+    document.getElementById(
+      "welcome-msg"
+    ).innerText =
+      "Bem-vindo de volta, Carlos!";
+
+  } else {
+
+    document.getElementById(
+      "user-name"
+    ).innerText =
+      "Ana Demonstração";
+
+    document.getElementById(
+      "user-role"
+    ).innerText =
+      "Membro";
+
+    document.getElementById(
+      "user-avatar"
+    ).innerText =
+      "A";
+
+    document.getElementById(
+      "welcome-msg"
+    ).innerText =
+      "Bem-vinda de volta, Ana!";
+
+  }
+
+  handleLogin(null);
+
+}
+
+
+function logout() {
+
+  document.getElementById(
+    "app-screen"
+  ).style.display = "none";
+
+  document.getElementById(
+    "login-screen"
+  ).style.display = "flex";
+
+}
+
+
+/* ============================================================
+   NAVEGAÇÃO
+   ============================================================ */
+
+function switchTab(tabId, clickedElement) {
+
+  document
+    .querySelectorAll(".tab-content")
+    .forEach(tab => {
+      tab.classList.remove("active");
+    });
+
+
+  document
+    .querySelectorAll(".menu-item")
+    .forEach(item => {
+      item.classList.remove("active");
+    });
+
+
+  const tab =
+    document.getElementById(tabId);
+
+  if (tab) {
+    tab.classList.add("active");
+  }
+
+
+  if (clickedElement) {
+    clickedElement.classList.add("active");
+  }
+
+
+  if (tabId === "recomendacoes") {
+    generateRecommendations();
+  }
+
+}
+
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+
+function initApp() {
+
+  renderBooks();
+
+
+  /* USUÁRIOS */
+
+  document.getElementById(
+    "users-list"
+  ).innerHTML = mockUsers.map(user => `
+
+    <tr>
+
+      <td>${escapeHTML(user.name)}</td>
+
+      <td>${escapeHTML(user.email)}</td>
+
+      <td>${escapeHTML(user.type)}</td>
+
+      <td>
+        <span class="badge badge-success">
+          ${escapeHTML(user.status)}
+        </span>
+      </td>
+
+    </tr>
+
+  `).join("");
+
+
+  /* EMPRÉSTIMOS */
+
+  const loansHtml =
+    mockLoans.map(loan => `
+
+      <tr>
+
+        <td>
+          ${escapeHTML(loan.user)}
+        </td>
+
+        <td>
+          ${escapeHTML(loan.book)}
+        </td>
+
+        <td>
+          ${escapeHTML(loan.date)}
+        </td>
+
+        <td>
+          ${escapeHTML(loan.due)}
+        </td>
+
+        <td>
+
+          <span
+            class="badge ${
+              loan.status === "Ativo"
+                ? "badge-success"
+                : "badge-danger"
+            }"
+          >
+            ${escapeHTML(loan.status)}
+          </span>
+
+        </td>
+
+      </tr>
+
+    `).join("");
+
+
+  document.getElementById(
+    "loans-list"
+  ).innerHTML = loansHtml;
+
+
+  document.getElementById(
+    "recent-activity-list"
+  ).innerHTML =
+    loansHtml;
+
+}
+
+
+/* ============================================================
+   PREFERÊNCIAS
+   ============================================================ */
+
+function toggleChip(element) {
+
+  element.classList.toggle("selected");
+
+}
+
+
+function savePreferences() {
+
+  const selected =
+    Array.from(
+      document.querySelectorAll(".chip.selected")
+    ).map(
+      chip => chip.innerText
+    );
+
+
+  const text =
+    document.getElementById(
+      "pref-text"
+    ).value;
+
+
+  localStorage.setItem(
+    "user_preferences",
+    JSON.stringify({
+      genres: selected,
+      keywords: text
+    })
+  );
+
+
+  alert(
+    "Preferências salvas com sucesso!"
+  );
+
+}
+
+
+/* ============================================================
+   RECOMENDAÇÕES
+   ============================================================ */
+
+function generateRecommendations() {
+
+  const container =
+    document.getElementById(
+      "recommendation-result"
+    );
+
+
+  const prefs =
+    JSON.parse(
+      localStorage.getItem(
+        "user_preferences"
+      )
+    ) || {
+      genres: [],
+      keywords: ""
+    };
+
+
+  const keyword =
+    prefs.keywords
+      ? prefs.keywords.toLowerCase().trim()
+      : "";
+
+
+  const matches =
+    mockBooks.filter(book => {
+
+      const genreMatch =
+        prefs.genres.includes(
+          book.genre
+        );
+
+
+      const keywordMatch =
+        keyword &&
+        (
+          book.title
+            .toLowerCase()
+            .includes(keyword)
+          ||
+          book.author
+            .toLowerCase()
+            .includes(keyword)
+          ||
+          book.genre
+            .toLowerCase()
+            .includes(keyword)
+        );
+
+
+      return genreMatch || keywordMatch;
+
+    });
+
+
+  if (matches.length > 0) {
+
+    container.innerHTML = `
+
+      <div
+        style="
+          background-color:var(--bg-card);
+          padding:20px;
+          border-radius:10px;
+          border:1px solid var(--border);
+          margin-bottom:20px;
+        "
+      >
+
+        <h3
+          style="
+            color:var(--success);
+            margin-bottom:8px;
+          "
+        >
+
+          <i class="fa-solid fa-circle-check"></i>
+
+          Recomendação Aprovada pelas Diretrizes
+
+        </h3>
+
+        <p
+          style="
+            color:var(--text-muted);
+            font-size:.9rem;
+          "
+        >
+          Encontramos
+          ${matches.length}
+          livro(s) no acervo:
+        </p>
+
+      </div>
+
+      <div class="books-grid">
+
+        ${matches.map(book => `
+
+          <div class="book-card">
+
+            <div class="book-cover-container">
+
+              <div
+                class="cover-loading"
+                id="rec-loading-${book.id}"
+              >
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Carregando...
+              </div>
+
+              <img
+                id="rec-cover-${book.id}"
+                class="book-cover-img"
+                alt="Capa de ${escapeHTML(book.title)}"
+                style="display:none;"
+              >
+
+            </div>
+
+            <div class="book-title">
+              ${escapeHTML(book.title)}
+            </div>
+
+            <div class="book-author">
+              ${escapeHTML(book.author)}
+            </div>
+
+            <span
+              class="badge badge-success"
+              style="
+                text-align:center;
+                margin-top:10px;
+              "
+            >
+              Aprovado p/ IA
+            </span>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    `;
+
+
+    /*
+      Carrega as capas das recomendações.
+    */
+
+    matches.forEach(async book => {
+
+      const img =
+        document.getElementById(
+          `rec-cover-${book.id}`
+        );
+
+      const loading =
+        document.getElementById(
+          `rec-loading-${book.id}`
+        );
+
+
+      try {
+
+        const url =
+          await getBookCover(book);
+
+
+        img.onload = () => {
+
+          img.style.display = "block";
+
+          if (loading) {
+            loading.style.display = "none";
+          }
+
+        };
+
+
+        img.onerror = () => {
+
+          img.src =
+            createFallbackCover(book);
+
+          img.style.display = "block";
+
+          if (loading) {
+            loading.style.display = "none";
+          }
+
+        };
+
+
+        img.src = url;
+
+      } catch {
+
+        img.src =
+          createFallbackCover(book);
+
+        img.style.display = "block";
+
+        if (loading) {
+          loading.style.display = "none";
+        }
+
+      }
+
+    });
+
+
+  } else {
+
+    container.innerHTML = `
+
+      <div
+        style="
+          background-color:var(--bg-card);
+          padding:40px;
+          border-radius:10px;
+          border:1px solid var(--border);
+          text-align:center;
+        "
+      >
+
+        <i
+          class="fa-solid fa-filter-circle-xmark"
+          style="
+            font-size:3rem;
+            color:var(--warning);
+            margin-bottom:15px;
+          "
+        ></i>
+
+        <h3>
+          Nenhuma recomendação encontrada
+        </h3>
+
+        <p
+          style="
+            color:var(--text-muted);
+            font-size:.9rem;
+            margin-top:8px;
+          "
+        >
+          Ajuste seus gêneros na aba
+          "Minhas Preferências".
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ============================================================
+   ASSISTENTE
+   ============================================================ */
+
+function sendMessage() {
+
+  const input =
+    document.getElementById(
+      "chat-input"
+    );
+
+  const box =
+    document.getElementById(
+      "chat-box"
+    );
+
+
+  if (!input.value.trim()) {
+    return;
+  }
+
+
+  const text =
+    input.value.trim();
+
+
+  box.innerHTML += `
+
+    <div class="message user">
+      ${escapeHTML(text)}
+    </div>
+
+  `;
+
+
+  input.value = "";
+
+  box.scrollTop =
+    box.scrollHeight;
+
+
+  setTimeout(() => {
+
+    let reply =
+      "Você pode configurar seus gêneros na aba 'Minhas Preferências' para calibrar a IA!";
+
+
+    const t =
+      text.toLowerCase();
+
+
+    if (
+      t.includes("tecnologia") ||
+      t.includes("código") ||
+      t.includes("programação")
+    ) {
+
+      reply =
+        "Temos ótimas opções como Clean Code, Arquitetura Limpa, Entendendo Algoritmos e O Programador Pragmático!";
+
+    }
+
+    else if (
+      t.includes("fantasia")
+    ) {
+
+      reply =
+        "Em fantasia temos O Senhor dos Anéis, O Hobbit, Harry Potter, Percy Jackson e O Nome do Vento!";
+
+    }
+
+    else if (
+      t.includes("terror")
+    ) {
+
+      reply =
+        "Para terror, temos O Iluminado e Drácula no acervo!";
+
+    }
+
+    else if (
+      t.includes("mistério")
+    ) {
+
+      reply =
+        "Para mistério, recomendo Sherlock Holmes, O Código Da Vinci e O Psicanalista!";
+
+    }
+
+
+    box.innerHTML += `
+
+      <div class="message bot">
+        ${escapeHTML(reply)}
+      </div>
+
+    `;
+
+
+    box.scrollTop =
+      box.scrollHeight;
+
+  }, 600);
+
+}
+
+</script>
+
+</body>
+</html>
+```
